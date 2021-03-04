@@ -46,25 +46,25 @@ gamma = NI / DI
 delta = NL / DL
 
 # Rate at which vaccination takes effect
-alpha_vec = [1 / 28]  # , 1 / 42]
+alpha_vec = [1 / 28, 1 / 42]
 
 # Rate at which individuals become vaccinated
-nu_vec = [0, 1 / 180]  # , 1 / 240, 1 / 300]
+nu_vec = [0, 1 / 180, 1 / 240, 1 / 300]
 
 # Proportion of unvaccinable indivaduals
-pNV_vec = [0.40]  # [0, 0.20, 0.25, 0.30, 0.40, 0.60, 0.75]  #
+pNV_vec = [0, 0.20, 0.25, 0.30, 0.40, 0.60, 0.75] 
 
 # Day at which the vaccination campaign starts
-tVaccin = [300]  # , 315, 330, 360]
+tVaccin = [300, 315, 330, 360]
 
 # Possible herd immunity thresholds (HITs)
 HIT_vec = [0]
 
 # Proportion fADE_S, fNI_S, fPI_S, and fR_S of susceptible individuals who become ADE, NI, PI, R after vaccination
-fVac = np.array([#[0.01, 0.02, 0.03, 0.94],             # Good vaccine
-                 [0.01, 0.04, 0.05, 0.90]]) #,              # Medium
-                 #[0.02, 0.10, 0.10, 0.78],                # Low
-                 #[0.02, 0.24, 0.24, 0.50]])               # Poor vaccine
+fVac = np.array([[0.01, 0.02, 0.03, 0.94],             # Good vaccine
+                 [0.01, 0.04, 0.05, 0.90],             # Medium
+                 [0.02, 0.10, 0.10, 0.78],             # Low
+                 [0.02, 0.24, 0.24, 0.50]])            # Poor vaccine
 
 # Probability of showing symptoms
 f_sick = 0.58
@@ -82,7 +82,7 @@ Qmax = 30 * N / 10000
 phome = 0.75
 
 # Total simulation time
-sim_time = 900  # 3 * 365
+sim_time = 900
 
 # NUmber of initial infections
 N_init_inf = 75
@@ -91,18 +91,18 @@ N_init_inf = 75
 tiso1_vec = [0, 20]
 tiso2 = sim_time
 
-# Sustainability period for the general distancing measures (first lockdown)
-tdista = 50   # March    10th, 2020
-tdistb = 115  # May      14th
+# Sustainability period for the general distancing measures
+tdista = 50   # March    10, 2020
+tdistb = 115  # May      14
 tdistc = 190  # July     28
-tdistd = 255  # October  01st
-tdiste = 290  # November 05th
-tdistf = 309  # November 24th
-tdistg = 316  # December 01st
-tdisth = 325  # December 10th
-tdisti = 335  # December 20th
-tdistj = 354  # January  08th, 2021
-tdistk = 450  # April    15th
+tdistd = 255  # October  01
+tdiste = 290  # November 05
+tdistf = 309  # November 24
+tdistg = 316  # December 01
+tdisth = 325  # December 10
+tdisti = 335  # December 20
+tdistj = 354  # January  08, 2021
+tdistk = 450  # April    15
 
 # Reproduction number
 a = 0.35
@@ -141,7 +141,6 @@ fUplus_I_val = 0.005
 fItilde_I = 0.95
 fItilde_L = 0.95
 fLtilde_L = 0.99
-#fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
 
 # Fraction at which the force of infection of PI and ADE individuals is reduced
 P_pi = 0.5
@@ -163,8 +162,6 @@ def f_parameter(subscript, upperscript):
             return fPI_sick
         elif upperscript == 'ADE':
             return fADE_sick
-        #elif upperscript == 'U+':
-        #    return fUplus_sick
         elif upperscript == 'Istar':
             return fIstar_sick
         elif upperscript == 'Lstar':
@@ -178,8 +175,6 @@ def f_parameter(subscript, upperscript):
             return fPI_dead
         elif upperscript == 'ADE':
             return fADE_dead
-        # elif upperscript == 'U+':
-        #    return fUplus_dead
         elif upperscript == 'Istar':
             return fIstar_dead
         elif upperscript == 'Lstar':
@@ -228,8 +223,6 @@ def f_parameter(subscript, upperscript):
             return fPI_I
         elif upperscript == 'ADE':
             return fADE_I
-        #elif upperscript == 'Uplus':
-        #    return fUplus_I
         elif upperscript == 'Itilde':
             return fItilde_I
         else:
@@ -243,8 +236,6 @@ def f_parameter(subscript, upperscript):
             return fPI_L
         elif upperscript == 'ADE':
             return fADE_L
-        # elif upperscript == 'Uplus':
-        #    return fUplus_L
         elif upperscript == 'Itilde':
             return fItilde_L
         elif upperscript == 'Ltilde':
@@ -412,9 +403,8 @@ def Q(t, pop, fUplus_I, fUplus_sick):
                  popsick('I', 'NI', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'NI', NL, t, pop, fUplus_I, fUplus_sick))
     Q2 = fiso * (popsick('I', 'PI', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'PI', NL, t, pop, fUplus_I, fUplus_sick)) + fiso * (
             popsick('I', 'ADE', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'ADE', NL, t, pop, fUplus_I, fUplus_sick)) + fiso * (
-                 popsick('I', 'Istar', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'Istar', NL, t, pop, fUplus_I, fUplus_sick)) + fiso * popsick('L',
-                                                                                                                                                       'Lstar',
-                                                                                                                                                       NL, t, pop, fUplus_I, fUplus_sick)
+                 popsick('I', 'Istar', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'Istar', NL, t, pop, fUplus_I, fUplus_sick))
+        + fiso * popsick('L','Lstar',NL, t, pop, fUplus_I, fUplus_sick)
     return Q1 + Q2
 
 
@@ -861,10 +851,7 @@ def dD(t, pop, lambdat, fUplus_I, fUplus_sick):
 # The dynamic in the recovered population is described by the following equations
 # Immune or Protected ('Im': for Immunize to avoid mixup with 'I' and 'NI') fully from the disease when vaccinated
 def dRVac(t, pop, lambdat, fUplus_I, fUplus_sick):
-    dR1 = alpha * fR_S * pop[index['S^V']] + alpha * fR_E * popsum('E', 'V', NE, t, pop) + alpha * fR_P * popsum('P',
-                                                                                                                 'V',
-                                                                                                                 NP, t,
-                                                                                                                 pop) \
+    dR1 = alpha * fR_S * pop[index['S^V']] + alpha * fR_E * popsum('E', 'V', NE, t, pop) + alpha * fR_P * popsum('P','V', NP, t, pop) \
           + alpha * fR_I * popsum('I', 'V', NI, t, pop) + alpha * fR_L * popsum('L', 'V', NL, t, pop)
     return dR1
 
@@ -1044,7 +1031,9 @@ for mm in range(len(pNV_vec)):
                 cnt = 0
                 lbda = []
                 for t in soln.t.tolist():
-                    lbda.append(l(t, soln.y[:, cnt]))
+                	fUplus_I = func_fUplus_I(t, fUplus_I_const)
+                    fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
+                    lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
                     cnt += 1
 
                 incid = np.multiply(lbda, Susc2)
@@ -1074,7 +1063,10 @@ for mm in range(len(pNV_vec)):
                 Vstart = ["None" for i in range(long)]
 
                 # Column: Proportion of unvaccinable
-                Vunvac = [str(pNV) for i in range(long)]
+                if pNV != 0:
+                	Vunvac = [str(pNV) for i in range(long)]
+                else:
+                	Vunvac = [str(0) for i in range(long)]
 
                 # Column: Lethal
                 Vlethal = ["None" for i in range(long)]
@@ -1113,6 +1105,10 @@ for mm in range(len(pNV_vec)):
 
                 for ii in range(len(nu_vec)):
                     nu = nu_vec[ii]
+					if nu == 0:
+                    	fUplus_I_const = 0
+                	else:
+                    	fUplus_I_const = fUplus_I_val
 
                     for jj in range(len(alpha_vec)):
                         alpha = alpha_vec[jj]
@@ -1199,8 +1195,10 @@ for mm in range(len(pNV_vec)):
                                     cnt = 0
                                     lbda = []
                                     for t in soln.t.tolist():
-                                        lbda.append(l(t, soln.y[:, cnt]))
-                                        cnt += 1
+										fUplus_I = func_fUplus_I(t, fUplus_I_const)
+										fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
+										lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
+										cnt += 1
 
                                     incid = np.multiply(lbda, Susc2)
 
@@ -1239,7 +1237,10 @@ for mm in range(len(pNV_vec)):
                                     Vstart = [str(tVac) for i in range(long)]
 
                                     # Column: Proportion of unvaccinable
-                                    Vunvac = [str(pNV) for i in range(long)]
+									if pNV != 0:
+                                    	Vunvac = [str(pNV) for i in range(long)]
+                                	else:
+                                    	Vunvac = [str(0) for i in range(long)]
 
                                     # Column: Lethal
                                     Vlethal = [str(fADE_dead) for i in range(long)]
@@ -1411,7 +1412,10 @@ for mm in range(len(pNV_vec)):
                                 Vstart = [str(tVac) for i in range(long)]
 
                                 # Column: Proportion of unvaccinable
-                                Vunvac = [str(pNV) for i in range(long)]
+								if pNV != 0:
+                                    Vunvac = [str(pNV) for i in range(long)]
+                                else:
+                                    Vunvac = [str(0) for i in range(long)]
 
                                 # Column: Lethal
                                 Vlethal = [str(fADE_dead) for i in range(long)]
@@ -1435,4 +1439,4 @@ for mm in range(len(pNV_vec)):
                                 df = df.append(df1, ignore_index=True)
 
 # Saving the data from the simulation
-df.to_csv("COVID_19_vaccine_simulation_USA_Lethality.csv")
+df.to_csv("COVID_19_ADE_simulation_USA.csv")
