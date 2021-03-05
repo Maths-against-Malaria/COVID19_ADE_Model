@@ -55,7 +55,7 @@ nu_vec = [0, 1 / 180, 1 / 240, 1 / 300]
 pNV_vec = [0, 0.20, 0.25, 0.30, 0.40, 0.60, 0.75] 
 
 # Day at which the vaccination campaign starts
-tVaccin = [300, 315, 330, 360]
+tVaccin = [330, 345, 360, 370]
 
 # Possible herd immunity thresholds (HITs)
 HIT_vec = [0]
@@ -119,7 +119,7 @@ pcont_f_vec = [0, 0.55]  # Thanksgiving period (more travels)
 pcont_g_vec = [0, 0.60]  # Less flights
 pcont_h_vec = [0, 0.70]  # Lockdowns (few flights)
 pcont_i_vec = [0, 0.55]  # Christmas period (family gatherings & more travels)
-pcont_j_vec = [0, 0.70]  # Post Christmas period
+pcont_j_vec = [0, 0.65]  # Post Christmas period
 
 
 # Probability of showing symptoms or dying when partially immunized (PI)
