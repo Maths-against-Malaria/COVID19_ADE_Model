@@ -49,13 +49,13 @@ delta = NL / DL
 N_init_inf = 200
 
 # Rate at which vaccination takes effect
-alpha_vec = [1 / 28, 1 / 42]
+alpha_vec = [1 / 28]  # , 1 / 42]
 
 # Rate at which individuals become vaccinated
-nu_vec = [0, 1 / 180, 1 / 240, 1 / 300]
+nu_vec = [0, 1 / 180]  # , 1 / 240, 1 / 300]
 
 # Day at which the vaccination campaign starts
-tVaccin = [300, 315, 330, 360] 
+tVaccin = [310]  # , 325, 340, 355]
 
 # Proportion of unvaccinable indivaduals
 pNV_vec = [0, 0.20, 0.25, 0.30, 0.40, 0.60, 0.75]
@@ -64,10 +64,10 @@ pNV_vec = [0, 0.20, 0.25, 0.30, 0.40, 0.60, 0.75]
 HIT_vec = [0]
 
 # Proportion fADE_S, fNI_S, fPI_S, and fR_S of succeptible individuals
-fVac = np.array([[0.01, 0.02, 0.03, 0.94],             # Good vaccine
-                 [0.01, 0.04, 0.05, 0.90],             # Medium
-                 [0.02, 0.10, 0.10, 0.78],             # Low
-                 [0.02, 0.24, 0.24, 0.50]])            # Poor vaccine
+fVac = np.array([[0.01, 0.02, 0.03, 0.94]])#,             # Good vaccine
+                 #[0.01, 0.04, 0.05, 0.90],             # Medium
+                 #[0.02, 0.10, 0.10, 0.78],             # Low
+                 #[0.02, 0.24, 0.24, 0.50]])            # Poor vaccine
 
 # Effectiveness of home isolation
 phome = 0.75
@@ -96,7 +96,7 @@ tdista = 40
 tdistb = 82
 tdistc = 246
 tdistd = 280
-tdiste = 380
+tdiste = 397
 tdistf = 450
 
 # Reproduction number
@@ -117,7 +117,7 @@ fPI_dead = 0.02
 
 # Probability of showing symptoms or dying when being Antibody Dependent Enhanced (ADE)
 fADE_sick = 0.92
-fADE_dead_vec = [0.07, 0.10, 0.15, 0.20]
+fADE_dead_vec = [0.07, 0.2]  #  0.10, 0.15, 0.20]
 
 # Probability of showing symptoms or dying while waiting for the vaccine to have effect
 fIstar_sick = 0.58
@@ -1025,7 +1025,7 @@ for mm in range(len(pNV_vec)):
                 for t in soln.t.tolist():
                     fUplus_I = func_fUplus_I(t, fUplus_I_const)
                     fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
-                	lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
+                    lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
                     cnt += 1
 
                 incid = np.multiply(lbda, Susc2)
@@ -1056,9 +1056,9 @@ for mm in range(len(pNV_vec)):
 
                 # Column: Proportion of unvaccinable
                 if pNV != 0:
-                	Vunvac = [str(pNV) for i in range(long)]
+                    Vunvac = [str(pNV) for i in range(long)]
                 else:
-                	Vunvac = [str(0) for i in range(long)]
+                    Vunvac = [str(0) for i in range(long)]
 
                 # Column: Lethal
                 Vlethal = ["None" for i in range(long)]
@@ -1183,7 +1183,7 @@ for mm in range(len(pNV_vec)):
                                     cnt = 0
                                     lbda = []
                                     for t in soln.t.tolist():
-                                    	fUplus_I = func_fUplus_I(t, fUplus_I_const)
+                                        fUplus_I = func_fUplus_I(t, fUplus_I_const)
                                         fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
                                         lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
                                         cnt += 1
@@ -1226,9 +1226,9 @@ for mm in range(len(pNV_vec)):
 
                                     # Column: Proportion of unvaccinable
                                     if pNV != 0:
-                                    	Vunvac = [str(pNV) for i in range(long)]
-                                	else:
-                                    	Vunvac = [str(0) for i in range(long)]
+                                        Vunvac = [str(pNV) for i in range(long)]
+                                    else:
+                                        Vunvac = [str(0) for i in range(long)]
 
                                     # Column: Lethal
                                     Vlethal = [str(fADE_dead) for i in range(long)]
@@ -1424,4 +1424,4 @@ for mm in range(len(pNV_vec)):
                                 df = df.append(df1, ignore_index=True)
 
 # Saving the data from the simulation
-df.to_csv("COVID_19_ADE_simulation_Germany.csv")
+df.to_csv("COVID_19_ADE_simulation_Germany_Coverage_vs_ADE_Level.csv")
