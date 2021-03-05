@@ -49,10 +49,10 @@ delta = NL / DL
 alpha_vec = [1 / 28, 1 / 42]
 
 # Rate at which individuals become vaccinated
-nu_vec = [0, 1 / 180, 1 / 240, 1 / 300]
+nu_vec = [0, 1 / 180]  # , 1 / 240, 1 / 300]
 
 # Proportion of unvaccinable indivaduals
-pNV_vec = [0, 0.20, 0.25, 0.30, 0.40, 0.60, 0.75] 
+pNV_vec = [0.6]  # [0, 0.20, 0.25, 0.30, 0.40, 0.60, 0.75]
 
 # Day at which the vaccination campaign starts
 tVaccin = [330, 345, 360, 370]
@@ -61,10 +61,10 @@ tVaccin = [330, 345, 360, 370]
 HIT_vec = [0]
 
 # Proportion fADE_S, fNI_S, fPI_S, and fR_S of susceptible individuals who become ADE, NI, PI, R after vaccination
-fVac = np.array([[0.01, 0.02, 0.03, 0.94],             # Good vaccine
-                 [0.01, 0.04, 0.05, 0.90],             # Medium
-                 [0.02, 0.10, 0.10, 0.78],             # Low
-                 [0.02, 0.24, 0.24, 0.50]])            # Poor vaccine
+fVac = np.array([[0.01, 0.02, 0.03, 0.94]])  # ,             # Good vaccine
+                 #[0.01, 0.04, 0.05, 0.90],             # Medium
+                 #[0.02, 0.10, 0.10, 0.78],             # Low
+                 #[0.02, 0.24, 0.24, 0.50]])            # Poor vaccine
 
 # Probability of showing symptoms
 f_sick = 0.58
@@ -128,7 +128,7 @@ fPI_dead = 0.02
 
 # Probability of showing symptoms or dying when being Antibody Dependent Enhanced (ADE)
 fADE_sick = 0.92
-fADE_dead_vec = [0.07, 0.10, 0.15, 0.20]
+fADE_dead_vec = [0.07, 0.2]  # 0.10, 0.15, 0.20]
 
 # Probability of showing symptoms or dying while waiting for the vaccine to have effect
 fIstar_sick = 0.58
@@ -403,8 +403,7 @@ def Q(t, pop, fUplus_I, fUplus_sick):
                  popsick('I', 'NI', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'NI', NL, t, pop, fUplus_I, fUplus_sick))
     Q2 = fiso * (popsick('I', 'PI', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'PI', NL, t, pop, fUplus_I, fUplus_sick)) + fiso * (
             popsick('I', 'ADE', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'ADE', NL, t, pop, fUplus_I, fUplus_sick)) + fiso * (
-                 popsick('I', 'Istar', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'Istar', NL, t, pop, fUplus_I, fUplus_sick))
-        + fiso * popsick('L','Lstar',NL, t, pop, fUplus_I, fUplus_sick)
+                 popsick('I', 'Istar', NI, t, pop, fUplus_I, fUplus_sick) + popsick('L', 'Istar', NL, t, pop, fUplus_I, fUplus_sick)) + fiso * popsick('L','Lstar',NL, t, pop, fUplus_I, fUplus_sick)
     return Q1 + Q2
 
 
@@ -1031,7 +1030,7 @@ for mm in range(len(pNV_vec)):
                 cnt = 0
                 lbda = []
                 for t in soln.t.tolist():
-                	fUplus_I = func_fUplus_I(t, fUplus_I_const)
+                    fUplus_I = func_fUplus_I(t, fUplus_I_const)
                     fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
                     lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
                     cnt += 1
@@ -1105,9 +1104,10 @@ for mm in range(len(pNV_vec)):
 
                 for ii in range(len(nu_vec)):
                     nu = nu_vec[ii]
-					if nu == 0:
-                    	fUplus_I_const = 0
-                	else:
+
+                    if nu == 0:
+                        fUplus_I_const = 0
+                    else:
                     	fUplus_I_const = fUplus_I_val
 
                     for jj in range(len(alpha_vec)):
@@ -1195,10 +1195,10 @@ for mm in range(len(pNV_vec)):
                                     cnt = 0
                                     lbda = []
                                     for t in soln.t.tolist():
-										fUplus_I = func_fUplus_I(t, fUplus_I_const)
-										fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
-										lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
-										cnt += 1
+                                        fUplus_I = func_fUplus_I(t, fUplus_I_const)
+                                        fUplus_sick = f_sick / (f_sick + (1 - f_sick) * fUplus_I)
+                                        lbda.append(l(t, soln.y[:, cnt], fUplus_I, fUplus_sick))
+                                        cnt += 1
 
                                     incid = np.multiply(lbda, Susc2)
 
@@ -1237,10 +1237,10 @@ for mm in range(len(pNV_vec)):
                                     Vstart = [str(tVac) for i in range(long)]
 
                                     # Column: Proportion of unvaccinable
-									if pNV != 0:
-                                    	Vunvac = [str(pNV) for i in range(long)]
-                                	else:
-                                    	Vunvac = [str(0) for i in range(long)]
+                                    if pNV != 0:
+                                        Vunvac = [str(pNV) for i in range(long)]
+                                    else:
+                                        Vunvac = [str(0) for i in range(long)]
 
                                     # Column: Lethal
                                     Vlethal = [str(fADE_dead) for i in range(long)]
@@ -1412,7 +1412,7 @@ for mm in range(len(pNV_vec)):
                                 Vstart = [str(tVac) for i in range(long)]
 
                                 # Column: Proportion of unvaccinable
-								if pNV != 0:
+                                if pNV != 0:
                                     Vunvac = [str(pNV) for i in range(long)]
                                 else:
                                     Vunvac = [str(0) for i in range(long)]
@@ -1439,4 +1439,4 @@ for mm in range(len(pNV_vec)):
                                 df = df.append(df1, ignore_index=True)
 
 # Saving the data from the simulation
-df.to_csv("COVID_19_ADE_simulation_USA.csv")
+df.to_csv("COVID_19_ADE_simulation_USA_Onset_vs_Schedule.csv")
