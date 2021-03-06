@@ -1439,4 +1439,4 @@ for mm in range(len(pNV_vec)):
                                 df = df.append(df1, ignore_index=True)
 
 # Saving the data from the simulation
-df.to_csv("COVID_19_ADE_simulation_USA_Onset_vs_Schedule.csv")
+df.to_csv("COVID_19_ADE_simulation_USA.csv")
