@@ -941,6 +941,9 @@ for mm in range(len(pNV_vec)):
         if HIT != 0:  # Assessing HIT
             if not is_HIT_and_vaccine:  # no interventions
                 nu = 0
+                
+                fUplus_I_const = 0
+                
                 alpha = 0
 
                 tiso1 = tiso1_vec[0]
